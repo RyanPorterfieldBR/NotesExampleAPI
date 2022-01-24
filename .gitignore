@@ -1,0 +1,10 @@
+# OS cache
+Desktop.ini
+.DS_Store
+
+# Windows shortcuts
+*.lnk
+
+# Thumbnails
+._*
+

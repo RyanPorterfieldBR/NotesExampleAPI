@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: Notes Example
+  version: '1.0'
+  summary: Simple example API for a note taking application
+  description: ''
+  license:
+    url: 'https://opensource.org/licenses/BSD-3-Clause'
+    name: BSD 3-Clause
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /notes:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteList'
+      operationId: getNotes
+      description: List all notes
+    post:
+      summary: ''
+      operationId: createNote
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Created note ID
+      description: Create a new note
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteTitle'
+  '/notes/{noteId}':
+    parameters:
+      - schema:
+          type: string
+        name: noteId
+        in: path
+        required: true
+        description: Note ID
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      operationId: getNote
+      description: Get note by ID
+    patch:
+      summary: ''
+      operationId: updateNote
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      description: Modify note body or title
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteUpdate'
+    delete:
+      summary: ''
+      operationId: delete-notes-noteId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+components:
+  schemas:
+    Note:
+      title: Note
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        createdDate:
+          type: number
+        modifiedDate:
+          type: number
+      description: Note data and metadata
+      examples:
+        - id: string
+          title: string
+          body: string
+          createdDate: 0
+          modifiedDate: 0
+    NoteList:
+      title: NoteList
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+      description: List of note IDs and titles
+    NoteTitle:
+      title: NoteTitle
+      type: object
+      properties:
+        title:
+          type: string
+      description: |-
+        Object containing only the title for a note.
+        Used for creating a new note.
+    NoteUpdate:
+      title: NoteUpdate
+      type: object
+      description: Note title and body for updating an existing note.
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+  requestBodies:
+    NoteTitle:
+      content:
+        application/json:
+          schema:
+            type: object
